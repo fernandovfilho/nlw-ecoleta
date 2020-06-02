@@ -1,10 +1,17 @@
-import express, { Request, Response } from "express";
+import * as dotenv from "dotenv";
+import express from "express";
+import path from "path";
+import routes from "./routes";
+dotenv.config();
 
 const app = express();
 
-app.get("/users", (request: Request, response: Response) => {
-  console.log("Listagem de usuários");
-  response.json({ message: "Hello Users" });
-});
+app.use(express.json());
 
-app.listen(3333);
+app.use(routes);
+
+app.use("/uploads", express.static(path.resolve(__dirname, "..", "uploads")));
+
+app.listen(process.env.PORT, () => {
+  console.log("App listen at: ", process.env.PORT);
+});
